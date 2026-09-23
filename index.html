@@ -5,47 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Horoscope & Number Checker</title>
     
-    <!-- These lines load PyScript so Python can run in the browser -->
-    <link rel="stylesheet" href="https://pyscript.net" />
-    <script type="module" src="https://pyscript.net"></script>
+    <!-- Using the updated stable PyScript library -->
+    <link rel="stylesheet" href="https://pyscript.net/releases/2026.7.2/core.css" />
+    <script type="module" src="https://pyscript.net/releases/2026.7.2/core.js"></script>
     
-    <!-- Simple styling to make it look like a proper web page -->
     <style>
         body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; line-height: 1.6; }
         h1 { color: #333; }
         input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        #result { margin-top: 20px; padding: 15px; border-radius: 4px; background-color: #d4edda; color: #155724; display: none; }
+        button { background-color: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #218838; }
+        #result { margin-top: 20px; padding: 15px; border-radius: 4px; background-color: #d4edda; color: #155724; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <h1>Daily Horoscope & Number Checker</h1>
     <label for="num-input">Enter your fav no to know how will b your day today:</label>
+    
+    <!-- We add a button so the user can firmly trigger the Python event -->
     <input type="text" id="num-input" placeholder="Type a number here...">
+    <button py-click="check_horoscope">Check My Day</button>
     
     <div id="result"></div>
 
-    <!-- Your Python code goes right here! -->
+    <!-- Python code runs directly in the main layout window -->
     <script type="py">
-        from js import document
-        from pyodide.ffi import create_proxy
+        from pyscript import display, document
 
-        def check_number(event):
-            # Get the value from the input box
+        def check_horoscope(event):
+            # Pull the input value
             n = document.getElementById("num-input").value
-            result_div = document.getElementById("result")
             
             if n.strip():
-                # Update the text just like your Streamlit app did
-                result_div.innerText = f"For the ppl w the no {n} your day will be utterly appealing and fabulous since your no is so special every day, matter of fact every sec of your life will be fabulous!"
-                result_div.style.display = "block"
+                message = f"For the ppl w the no {n} your day will be utterly appealing and fabulous since your no is so special every day, matter of fact every sec of your life will be fabulous!"
+                # Safely print straight to our result layout box
+                document.getElementById("result").innerText = message
             else:
-                result_div.style.display = "none"
-
-        # Listen for when the user types in the box
-        input_element = document.getElementById("num-input")
-        input_element.addEventListener("input", create_proxy(check_number))
+                document.getElementById("result").innerText = "Please enter a valid number first!"
     </script>
 
 </body>
 </html>
+
